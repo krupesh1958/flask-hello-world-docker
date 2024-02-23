@@ -21,7 +21,7 @@ For example, if you want to practice to run docker into instace that time this a
     ```
  2. For run project
     ```bash
-    docker run flask-docker
+    docker run -d -p 8000:8000 flask-docker
     ```
 
 # You have to directly using this application without any dockerfile.
