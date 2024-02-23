@@ -17,11 +17,11 @@ For example, if you want to practice to run docker into instace that time this a
 # Follow Below steps to run game.
  1. For build project
     ```bash
-    Docker build . --tag flask-docker
+    docker build . --tag flask-docker
     ```
  2. For run project
     ```bash
-    Docker run flask-docker
+    docker run flask-docker
     ```
 
 # You have to directly using this application without any dockerfile.
