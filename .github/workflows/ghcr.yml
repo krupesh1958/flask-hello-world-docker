@@ -5,6 +5,7 @@ on:
     branches: [ main ]
     paths:
       - '*.py'
+      - 'Dockerfile'
 
 jobs:
     deploy-image:
@@ -21,7 +22,6 @@ jobs:
 
           - name: Build docker image & tag it
             run: |
-              LABEL org.opencontainers.image.source=https://github.com/krupesh1958/flask-hello-world-docker
               docker build -t flask-hello-world-docker .
               docker tag flask-hello-world-docker ghcr.io/krupesh1958/flask_hello_world_docker:$(git rev-parse --verify HEAD)
 
