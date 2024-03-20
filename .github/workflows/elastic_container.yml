@@ -1,0 +1,52 @@
+name: EC2 Docker Deployment
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Deploy to Server 1
+      uses: easingthemes/ssh-deploy@main
+      env:
+        SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_KEY }}
+        REMOTE_HOST: ${{ secrets.HOST_DNS }}
+        REMOTE_USER: ${{ secrets.USERNAME }}
+        TARGET: ${{ secrets.TARGET_DIR }}
+
+    - name: SSH into EC2 instance and execute commands
+      uses: appleboy/ssh-action@master
+      with:
+        host: 44.203.148.92
+        username: ubuntu
+        key: ${{ secrets.EC2_SSH_KEY }}
+        script: |
+          # Check if Docker is installed
+          if ! command -v docker &> /dev/null
+          then
+              # Install Docker
+              sudo snap install docker
+          fi
+          sleep 10
+
+          
+          # Remove all containers and images
+          sudo chmod 666 /var/run/docker.sock
+          sudo docker system prune -y
+          
+          # Remove port
+          lsof -t -i:8000|xargs kill -9
+
+          # Create new container and image
+          # Replace the following lines with your Docker commands
+          sudo docker build . --tag flask-docker && sudo docker run -d -p 8000:8000 flask-docker
+
+    - name: Disconnect from EC2 instance
+      run: echo "Connection to EC2 instance closed. 🌸🔥"
